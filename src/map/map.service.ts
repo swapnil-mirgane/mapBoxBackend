@@ -13,9 +13,11 @@ export class MapService {
   ){}
   
 
-  create(createMapDto: CreateMapDto):Promise<geographyData> {
-    return this.geographyReposatory.save(createMapDto);
+   create(createMapDto: CreateMapDto):Promise<geographyData> {
+       return this.geographyReposatory.save(createMapDto);
   }
+
+
 
   findAll():Observable<geographyData[]> {
     return from (this.geographyReposatory.find());

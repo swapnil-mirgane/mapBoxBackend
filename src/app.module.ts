@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MapModule } from './map/map.module';
 import { ConfigModule } from '@nestjs/config';
+import { MulterModule } from '@nestjs/platform-express';
 @Module({
   imports: [MapModule, ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
@@ -16,7 +17,7 @@ import { ConfigModule } from '@nestjs/config';
       autoLoadEntities: true,
       synchronize: true,
       logging:true
-    })],
+    }),],
   controllers: [AppController],
   providers: [AppService],
 })

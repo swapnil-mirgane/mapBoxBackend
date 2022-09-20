@@ -1,6 +1,6 @@
 import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
 import { Point } from 'geojson';
-@Entity('mapdata')
+@Entity('geographyData')
 export class geographyData {
     @PrimaryGeneratedColumn()
     id:number;
