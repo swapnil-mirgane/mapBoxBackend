@@ -7,6 +7,7 @@ import { extname, join} from 'path';
 import { createReadStream, readFileSync } from 'fs';
 import type { Response } from 'express';
 import { parse } from 'papaparse';
+import { Parcel } from './entities/Polygoan.entity';
 @Controller('map')
 export class MapController {
   constructor(private readonly mapService: MapService) {}
@@ -149,5 +150,13 @@ export class MapController {
 //     //console.log(typeof (parsedCsv.data.id))
 //   }
  
+
+
+@Post('polygon')
+async createParcelPoint(
+    @Body()
+    createParcelPointDto): Promise<any> {
+    return this.mapService.createParcelPoint(createParcelPointDto)
+}
 
 }
