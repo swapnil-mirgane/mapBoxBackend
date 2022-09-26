@@ -21,6 +21,6 @@ City_Name:String;
     polygon:Polygon;
 
     @IsOptional()
-    position?:number[][]
+    coordinates?:number[][]
 
 }

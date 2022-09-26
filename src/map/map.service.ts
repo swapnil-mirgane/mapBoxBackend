@@ -38,14 +38,14 @@ export class MapService {
 
 //  const { polygon} = createParcelPointDto;
 
-// console.log(createParcelPointDto,"DTO")
+console.log(createParcelPointDto,"DTO")
 
     const polygon = {
         type: 'Polygon',
-        coordinates: [createParcelPointDto.position] //Need one more dimension here.
+        coordinates: [createParcelPointDto.coordinates] //Need one more dimension here.
     }
 
-  console.log(polygon)
+  console.log("hiii"+polygon);
 
  const parcel = this.parcel.create({City_Name:createParcelPointDto.City_Name, polygon})
 

@@ -63,6 +63,31 @@ export class MapController {
   // }
 
 
+  @Post('uplo')
+  @UseInterceptors(
+    FileInterceptor('csv', {
+      storage: diskStorage({
+        destination: './swapnil',
+        filename: (req, file, cb) => {
+          const randomName = Array(32)
+            .fill(null)
+            .map(() => Math.round(Math.random() * 16).toString(16))
+            .join('');
+          cb(null, `${randomName}${extname(file.originalname)}`);
+        },
+      }),
+    }),
+  )
+  async uploadCsv(@UploadedFile() file) {
+    
+    
+    this.mapService.create(file);  
+    console.log(file);
+    return 'File uploaded successfully';
+  }
+
+
+
 
 
  @Post('upload')
@@ -84,8 +109,10 @@ export class MapController {
       },
     })
   )
-  async uploadFile(@Body() fileData, @UploadedFile() file: Express.Multer.File) {
-    const csvFile = readFileSync(`mapbox/${file.originalname}`);
+  
+  async uploadFile( @UploadedFile() file: Express.Multer.File) {
+    
+    const csvFile = readFileSync(`mapbox/data.csv`);
     const csvData = csvFile.toString();
     const parsedCsv = await parse(csvData, {
             header: true,
