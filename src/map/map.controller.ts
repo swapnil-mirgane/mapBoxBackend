@@ -8,6 +8,7 @@ import { createReadStream, readFileSync } from 'fs';
 import type { Response } from 'express';
 import { parse } from 'papaparse';
 import { Parcel } from './entities/Polygoan.entity';
+let randomName;
 @Controller('map')
 export class MapController {
   constructor(private readonly mapService: MapService) {}
@@ -63,13 +64,13 @@ export class MapController {
   // }
 
 
-  @Post('uplo')
+  @Post('upload')
   @UseInterceptors(
     FileInterceptor('csv', {
       storage: diskStorage({
-        destination: './swapnil',
+        destination: './mapbox',
         filename: (req, file, cb) => {
-          const randomName = Array(32)
+           randomName = Array(32)
             .fill(null)
             .map(() => Math.round(Math.random() * 16).toString(16))
             .join('');
@@ -79,9 +80,29 @@ export class MapController {
     }),
   )
   async uploadCsv(@UploadedFile() file) {
-    
-    
-    this.mapService.create(file);  
+    const csvFile = readFileSync(`mapbox/${randomName}${extname(file.originalname)}`);
+    const csvData = csvFile.toString();
+    const parsedCsv = await parse(csvData, {
+            header: true,
+            skipEmptyLines: true,
+            transformHeader: (header) => header.toLowerCase().replace('#', '').trim(),
+            complete: (results) => results.data,
+          });
+          console.log(parsedCsv.data[0])
+          parsedCsv.data.forEach((element) => {
+            var point = { type: 'Point', coordinates: [element.lat,element.lon]};
+            const loadData={ 
+              id:element.id,
+              Lat:element.lat,
+              Long:element.lon,
+              Name:element.name,
+              City_Name:element.city_name,
+               location:point,
+            };
+            console.log(loadData);
+            
+      this.mapService.create(loadData);  
+          });
     console.log(file);
     return 'File uploaded successfully';
   }
@@ -185,5 +206,5 @@ async createParcelPoint(
     createParcelPointDto): Promise<any> {
     return this.mapService.createParcelPoint(createParcelPointDto)
 }
-
-}
+   }
+ 
